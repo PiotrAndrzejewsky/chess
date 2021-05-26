@@ -1,10 +1,12 @@
 package com.peerand.chess.core;
 
+import com.peerand.chess.implementation.PositionImpl;
+
 import java.util.Map;
 
 public interface Board {
 
-    void move(Position p1, Position p2);
+    void move(PositionImpl p1, PositionImpl p2);
 
     Piece getPiece(Position position);
 

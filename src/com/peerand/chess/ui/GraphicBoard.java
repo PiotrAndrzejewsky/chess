@@ -1,11 +1,17 @@
 package com.peerand.chess.ui;
 
+import com.peerand.chess.core.Piece;
+import com.peerand.chess.core.Position;
+import com.peerand.chess.pieces.BasePiece;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 public class GraphicBoard implements GUI{
     public JFrame frame;
     public JButton[][] buttons = new JButton[8][8];
+    public HashMap<Position, BasePiece> pieces = new HashMap<>();
 
     public void createBoard() {
         frame = new JFrame("Chess");
@@ -40,7 +46,7 @@ public class GraphicBoard implements GUI{
                 frame.add(button);
             }
         }
-        PiecesOnBoard pieces = new PiecesOnBoard();
-        pieces.setPieces(frame, buttons);
+        PiecesOnBoard p = new PiecesOnBoard();
+        p.setPieces(frame, buttons, pieces);
     }
 }

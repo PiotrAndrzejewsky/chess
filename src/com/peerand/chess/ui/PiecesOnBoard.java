@@ -1,6 +1,12 @@
 package com.peerand.chess.ui;
 
+import com.peerand.chess.core.Piece;
+import com.peerand.chess.core.Position;
+import com.peerand.chess.implementation.PositionImpl;
+import com.peerand.chess.pieces.*;
+
 import javax.swing.*;
+import java.util.HashMap;
 
 public class PiecesOnBoard {
 
@@ -22,7 +28,7 @@ public class PiecesOnBoard {
     public final ImageIcon whiteKingImage = new ImageIcon(path + "wk.png");
     public final ImageIcon whitePawnImage = new ImageIcon(path + "wp.png");
 
-    public void setPieces(JFrame frame, JButton[][] buttons) {
+    public void setPieces(JFrame frame, JButton[][] buttons, HashMap<Position, BasePiece> pieces) {
         int j = 0;
         int i = 0;
 
@@ -31,26 +37,33 @@ public class PiecesOnBoard {
             switch (piecePlacementArray[j]) {
                 case "r":
                     buttons[i / 8][i % 8].setIcon(blackRookImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new Rook(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
+
                     break;
 
                 case "b":
                     buttons[i / 8][i % 8].setIcon(blackBishopImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new Bishop(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
                     break;
 
                 case "n":
                     buttons[i / 8][i % 8].setIcon(blackKnightImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new Knight(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
                     break;
 
                 case "q":
                     buttons[i / 8][i % 8].setIcon(blackQueenImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new Queen(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
                     break;
 
                 case "k":
                     buttons[i / 8][i % 8].setIcon(blackKingImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new King(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
                     break;
 
                 case "p":
                     buttons[i / 8][i % 8].setIcon(blackPawnImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new Pawn(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
                     break;
 
 
@@ -58,26 +71,32 @@ public class PiecesOnBoard {
 
                 case "R":
                     buttons[i / 8][i % 8].setIcon(whiteRookImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new Rook(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
                     break;
 
                 case "B":
                     buttons[i / 8][i % 8].setIcon(whiteBishopImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new Bishop(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
                     break;
 
                 case "N":
                     buttons[i / 8][i % 8].setIcon(whiteKnightImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new Knight(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
                     break;
 
                 case "Q":
                     buttons[i / 8][i % 8].setIcon(whiteQueenImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new Queen(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
                     break;
 
                 case "K":
                     buttons[i / 8][i % 8].setIcon(whiteKingImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new Knight(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
                     break;
 
                 case "P":
                     buttons[i / 8][i % 8].setIcon(whitePawnImage);
+                    pieces.put(new PositionImpl(i / 8, i % 8), new Pawn(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
                     break;
 
 
@@ -91,5 +110,7 @@ public class PiecesOnBoard {
             i++;
             j++;
         }
+        MouseListener mouseListener = new MouseListener(frame, buttons, pieces);
+        mouseListener.addButtonsToMouseListener();
     }
 }
