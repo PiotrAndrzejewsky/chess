@@ -13,10 +13,14 @@ public class PositionImpl implements Position {
     }
 
     @Override
-    public void setX(int x) { this.x = x; }
+    public void setX(int x) {
+        this.x = x;
+    }
 
     @Override
-    public void setY(int y) { this.y = y; }
+    public void setY(int y) {
+        this.y = y;
+    }
 
     @Override
     public int getX() {
@@ -26,5 +30,25 @@ public class PositionImpl implements Position {
     @Override
     public int getY() {
         return y;
+    }
+
+    @Override
+    public int hashCode() {
+        return x * y + 21 * (x + 2) * (y + 3);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (this.hashCode() == obj.hashCode()) {
+            return true;
+        }
+
+        else {
+            return false;
+        }
     }
 }
