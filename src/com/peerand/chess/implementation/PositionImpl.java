@@ -39,16 +39,11 @@ public class PositionImpl implements Position {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
+        if (this == obj) return true;
+        if(!(obj instanceof Position)) return false;
 
-        if (this.hashCode() == obj.hashCode()) {
-            return true;
-        }
+        Position p = (Position) obj;
 
-        else {
-            return false;
-        }
+        return p.getX() == x && p.getY() == y;
     }
 }
