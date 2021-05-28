@@ -103,7 +103,7 @@ public class PiecesOnBoard{
 
                 case "K":
                     buttons[i / 8][i % 8].setIcon(whiteKingImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new Knight(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
+                    pieces.put(new PositionImpl(i / 8, i % 8), new King(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
                     break;
 
                 case "P":

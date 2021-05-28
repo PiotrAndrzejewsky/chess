@@ -23,22 +23,22 @@ public class Bishop extends BasePiece{
         y = p1.getY();
 
         // x and y are > 0
-        if (changeOfX == changeOfY && changeOfX > 0) {
+        if (changeOfX > 0 && changeOfY > 0) {
             check = checkBishopMove(pieces, p1, p2, 1,1);
         }
 
         // x and y are < 0
-        else if (changeOfX == changeOfY && changeOfX < 0) {
+        else if (changeOfX < 0 && changeOfY < 0) {
             check = checkBishopMove(pieces, p1, p2, -1,-1);
         }
 
         // x is > 0 and y is < 0
-        else if (changeOfX == Math.abs(changeOfY)) {
+        else if (changeOfX > 0 && changeOfY < 0) {
             check = checkBishopMove(pieces, p1, p2, 1,-1);
         }
 
         // x is < 0 and y > 0
-        else if (Math.abs(changeOfX) == changeOfY) {
+        else if (changeOfX < 0 && changeOfY > 0) {
             check = checkBishopMove(pieces, p1, p2, -1,1);
         }
 
@@ -47,12 +47,16 @@ public class Bishop extends BasePiece{
 
     public boolean checkBishopMove(HashMap<Position, BasePiece> pieces, PositionImpl p1, PositionImpl p2, int xAdd, int yAdd) {
 
-        while (x < 8 && y < 8) {
+        System.out.println(xAdd);
+        System.out.println(yAdd);
+
+        while (x < 8 && y < 8 && x >= 0 && y >= 0) {
             x = x + xAdd;
             y = y + yAdd;
-            if (x == p2.getX() && y == p2.getY() && pieces.get(new PositionImpl(x, y)).getColor()
-                    != pieces.get(p1).getColor()) {
-                break;
+            if (x == p2.getX() && y == p2.getY() && pieces.containsKey(new PositionImpl(x, y))) {
+                if (pieces.get(new PositionImpl(x, y)).getColor() != pieces.get(p1).getColor()) {
+                    break;
+                }
             }
             if (pieces.containsKey(new PositionImpl(x, y))) {
                 return false;

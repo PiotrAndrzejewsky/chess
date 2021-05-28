@@ -1,6 +1,5 @@
 package com.peerand.chess.ui;
 
-import com.peerand.chess.core.Piece;
 import com.peerand.chess.core.Position;
 import com.peerand.chess.pieces.BasePiece;
 
