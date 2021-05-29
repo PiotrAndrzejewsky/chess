@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class PiecesOnBoard{
 
-    private final String path = "src\\resources\\pieceIcons\\";
+    private final String path = "src/resources/pieceIcons/";
     private final String startingPiecePlacement = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
     private final String[] piecePlacementArray = startingPiecePlacement.split("");
 
@@ -49,66 +49,66 @@ public class PiecesOnBoard{
 
             switch (piecePlacementArray[j]) {
                 case "r":
-                    buttons[i / 8][i % 8].setIcon(blackRookImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new Rook(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
+                    buttons[x][y].setIcon(blackRookImage);
+                    pieces.put(new PositionImpl(x, y), new Rook(BasePiece.Color.BLACK, false, BasePiece.Type.ROOK));
                     break;
 
                 case "b":
-                    buttons[i / 8][i % 8].setIcon(blackBishopImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new Bishop(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
+                    buttons[x][y].setIcon(blackBishopImage);
+                    pieces.put(new PositionImpl(x, y), new Bishop(BasePiece.Color.BLACK, false, BasePiece.Type.BISHOP));
                     break;
 
                 case "n":
-                    buttons[i / 8][i % 8].setIcon(blackKnightImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new Knight(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
+                    buttons[x][y].setIcon(blackKnightImage);
+                    pieces.put(new PositionImpl(x, y), new Knight(BasePiece.Color.BLACK, false, BasePiece.Type.KNIGHT));
                     break;
 
                 case "q":
-                    buttons[i / 8][i % 8].setIcon(blackQueenImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new Queen(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
+                    buttons[x][y].setIcon(blackQueenImage);
+                    pieces.put(new PositionImpl(x, y), new Queen(BasePiece.Color.BLACK, false, BasePiece.Type.QUEEN));
                     break;
 
                 case "k":
-                    buttons[i / 8][i % 8].setIcon(blackKingImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new King(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
+                    buttons[x][y].setIcon(blackKingImage);
+                    pieces.put(new PositionImpl(x, y), new King(BasePiece.Color.BLACK, false, BasePiece.Type.KING));
                     break;
 
                 case "p":
-                    buttons[i / 8][i % 8].setIcon(blackPawnImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new Pawn(buttons[i / 8][i % 8].getName(), BasePiece.Color.BLACK));
+                    buttons[x][y].setIcon(blackPawnImage);
+                    pieces.put(new PositionImpl(x, y), new Pawn(BasePiece.Color.BLACK, false, BasePiece.Type.PAWN));
                     break;
 
 
 
 
                 case "R":
-                    buttons[i / 8][i % 8].setIcon(whiteRookImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new Rook(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
+                    buttons[x][y].setIcon(whiteRookImage);
+                    pieces.put(new PositionImpl(x, y), new Rook(BasePiece.Color.WHITE, false, BasePiece.Type.ROOK));
                     break;
 
                 case "B":
-                    buttons[i / 8][i % 8].setIcon(whiteBishopImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new Bishop(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
+                    buttons[x][y].setIcon(whiteBishopImage);
+                    pieces.put(new PositionImpl(x, y), new Bishop(BasePiece.Color.WHITE, false, BasePiece.Type.BISHOP));
                     break;
 
                 case "N":
-                    buttons[i / 8][i % 8].setIcon(whiteKnightImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new Knight(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
+                    buttons[x][y].setIcon(whiteKnightImage);
+                    pieces.put(new PositionImpl(x, y), new Knight(BasePiece.Color.WHITE, false, BasePiece.Type.KNIGHT));
                     break;
 
                 case "Q":
-                    buttons[i / 8][i % 8].setIcon(whiteQueenImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new Queen(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
+                    buttons[x][y].setIcon(whiteQueenImage);
+                    pieces.put(new PositionImpl(x, y), new Queen(BasePiece.Color.WHITE, false, BasePiece.Type.QUEEN));
                     break;
 
                 case "K":
-                    buttons[i / 8][i % 8].setIcon(whiteKingImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new King(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
+                    buttons[x][y].setIcon(whiteKingImage);
+                    pieces.put(new PositionImpl(x, y), new King(BasePiece.Color.WHITE, false, BasePiece.Type.KING));
                     break;
 
                 case "P":
-                    buttons[i / 8][i % 8].setIcon(whitePawnImage);
-                    pieces.put(new PositionImpl(i / 8, i % 8), new Pawn(buttons[i / 8][i % 8].getName(), BasePiece.Color.WHITE));
+                    buttons[x][y].setIcon(whitePawnImage);
+                    pieces.put(new PositionImpl(x, y), new Pawn(BasePiece.Color.WHITE, false, BasePiece.Type.PAWN));
                     break;
 
 

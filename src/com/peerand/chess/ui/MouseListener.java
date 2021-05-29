@@ -1,9 +1,11 @@
 package com.peerand.chess.ui;
 
 import com.peerand.chess.core.Board;
+import com.peerand.chess.core.Player;
 import com.peerand.chess.core.Position;
 import com.peerand.chess.implementation.PositionImpl;
 import com.peerand.chess.pieces.BasePiece;
+import com.peerand.chess.pieces.King;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -17,6 +19,7 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
     private boolean firstClick = true;
     private PositionImpl position1 = new PositionImpl(0, 0);
     private PositionImpl position2 = new PositionImpl(0, 0);
+    private Player player = new Player(BasePiece.Color.WHITE);
 
     MouseListener(JFrame frame, JButton[][] buttons, HashMap<Position, BasePiece> pieces) {
         this.frame = frame;
@@ -34,7 +37,20 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
 
     @Override
     public void checkMove(PositionImpl p1, PositionImpl p2) {
-        System.out.println(pieces.containsKey(p2));
+        if (pieces.get(p1) instanceof King) {
+            if (((King) pieces.get(p1)).canCastle(pieces, p1, p2)) {
+                if (p2.getY() == 7) {
+                    move(p2, new PositionImpl(p2.getX(),p2.getY() - 2));
+                    move(p1, new PositionImpl(p2.getX(),p2.getY() - 1));
+                }
+                else {
+                    move(p2, new PositionImpl(p2.getX(),p2.getY() + 3));
+                    move(p1, new PositionImpl(p2.getX(),p2.getY() + 2));
+                }
+            }
+            return;
+        }
+
         if (pieces.containsKey(p2)) {
             if (pieces.get(p1).getColor() == pieces.get(p2).getColor()) {
                 return;
@@ -48,11 +64,13 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
 
     @Override
     public void move(PositionImpl p1, PositionImpl p2) {
+        player.changeCurrentPlayer();
+        pieces.get(p1).isMoved(true);
         buttons[p2.getX()][p2.getY()].setIcon(buttons[p1.getX()][p1.getY()].getIcon());
         buttons[p1.getX()][p1.getY()].setIcon(null);
         BasePiece piece = pieces.get(p1);
         pieces.remove(p1);
-        if (pieces.containsKey(p2)) { pieces.remove(p2); }
+        pieces.remove(p2);
         pieces.put(p2, piece);
     }
 
@@ -82,7 +100,7 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
             }
         }
 
-        if (firstClick && pieces.containsKey(position)) {
+        if (firstClick && pieces.containsKey(position) && pieces.get(position).getColor() == player.getCurrentPlayer()) {
             position1 = new PositionImpl(position.getX(), position.getY());
             firstClick = false;
         }
