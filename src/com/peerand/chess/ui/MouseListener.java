@@ -6,6 +6,7 @@ import com.peerand.chess.core.Position;
 import com.peerand.chess.implementation.PositionImpl;
 import com.peerand.chess.pieces.BasePiece;
 import com.peerand.chess.pieces.King;
+import com.peerand.chess.pieces.Pawn;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -13,16 +14,14 @@ import java.util.HashMap;
 
 public class MouseListener implements Board, java.awt.event.MouseListener {
 
-    private JFrame frame;
-    private JButton[][] buttons;
-    private HashMap<Position, BasePiece> pieces;
+    private final JButton[][] buttons;
+    private final HashMap<Position, BasePiece> pieces;
     private boolean firstClick = true;
     private PositionImpl position1 = new PositionImpl(0, 0);
     private PositionImpl position2 = new PositionImpl(0, 0);
     private Player player = new Player(BasePiece.Color.WHITE);
 
-    MouseListener(JFrame frame, JButton[][] buttons, HashMap<Position, BasePiece> pieces) {
-        this.frame = frame;
+    MouseListener(JButton[][] buttons, HashMap<Position, BasePiece> pieces) {
         this.buttons = buttons;
         this.pieces = pieces;
     }
@@ -72,6 +71,11 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
         pieces.remove(p1);
         pieces.remove(p2);
         pieces.put(p2, piece);
+        System.out.println(p2.getX());
+        System.out.println(pieces.get(p2) instanceof Pawn);
+        if (pieces.get(p2) instanceof Pawn && (p2.getX() == 0 || p2.getX() == 7)) {
+            buttons[p2.getX()][p2.getY()].setIcon(((Pawn) pieces.get(p2)).promotePawn(p2));
+        }
     }
 
 

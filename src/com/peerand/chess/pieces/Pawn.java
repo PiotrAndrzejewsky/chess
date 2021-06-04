@@ -2,12 +2,20 @@ package com.peerand.chess.pieces;
 
 import com.peerand.chess.core.Position;
 import com.peerand.chess.implementation.PositionImpl;
+import com.peerand.chess.ui.PiecesOnBoard;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashMap;
 
-public class Pawn extends BasePiece{
+public class Pawn extends BasePiece implements MouseListener, ActionListener {
     private int x;
     private int y;
+    private Icon icon;
 
     public Pawn(Color color, boolean moved, Type type) {
         super(color, moved, type);
@@ -94,5 +102,83 @@ public class Pawn extends BasePiece{
         }
 
         return false;
+    }
+
+    public Icon promotePawn(PositionImpl p1) {
+        JFrame frame = new JFrame("Choose piece to promote to");
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setSize(300, 300);
+        frame.setLayout(new GridLayout(4, 1));
+        frame.setVisible(true);
+
+        JButton queen = new JButton();
+        JButton rook = new JButton();
+        JButton bishop = new JButton();
+        JButton knight = new JButton();
+
+        PiecesOnBoard p = new PiecesOnBoard();
+
+        if (p1.getX() == 0) {
+            queen.setIcon(p.whiteQueenImage);
+            rook.setIcon(p.whiteRookImage);
+            bishop.setIcon(p.whiteBishopImage);
+            knight.setIcon(p.whiteKnightImage);
+        }
+
+        else {
+            queen.setIcon(p.blackQueenImage);
+            rook.setIcon(p.blackRookImage);
+            bishop.setIcon(p.blackBishopImage);
+            knight.setIcon(p.blackKnightImage);
+        }
+
+//        queen.addMouseListener(this);
+//        rook.addMouseListener(this);
+//        bishop.addMouseListener(this);
+//        knight.addMouseListener(this);
+
+        queen.addActionListener(this);
+        rook.addActionListener(this);
+        bishop.addActionListener(this);
+        knight.addActionListener(this);
+
+        frame.add(queen);
+        frame.add(rook);
+        frame.add(bishop);
+        frame.add(knight);
+
+        return queen.getIcon();
+    }
+
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+//        System.out.println(e.getComponent());
+//        System.out.println(e.getButton());
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("fasfas");
     }
 }
