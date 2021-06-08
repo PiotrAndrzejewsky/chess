@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
-public class GraphicBoard implements GUI{
+public class GraphicBoard implements GUI {
     public JFrame frame;
     public JButton[][] buttons = new JButton[8][8];
     public HashMap<Position, BasePiece> pieces = new HashMap<>();
@@ -22,8 +22,8 @@ public class GraphicBoard implements GUI{
     }
 
     public void createButtons() {
-        Color color1 = Color.WHITE;
-        Color color2 = Color.DARK_GRAY;
+        Color color1 = Color.DARK_GRAY;
+        Color color2 = Color.WHITE;
         Color color3;
 
         String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h"};

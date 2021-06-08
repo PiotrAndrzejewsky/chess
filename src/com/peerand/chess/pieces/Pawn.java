@@ -2,6 +2,7 @@ package com.peerand.chess.pieces;
 
 import com.peerand.chess.core.Position;
 import com.peerand.chess.implementation.PositionImpl;
+import com.peerand.chess.ui.GraphicBoard;
 import com.peerand.chess.ui.PiecesOnBoard;
 
 import javax.swing.*;
@@ -12,10 +13,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
 
-public class Pawn extends BasePiece implements MouseListener, ActionListener {
+public class Pawn extends BasePiece{
     private int x;
     private int y;
-    private Icon icon;
+    private static Icon icon;
+    private JButton queen;
+    private JButton rook;
+    private JButton bishop;
+    private JButton knight;
+    private PositionImpl p1;
 
     public Pawn(Color color, boolean moved, Type type) {
         super(color, moved, type);
@@ -104,81 +110,27 @@ public class Pawn extends BasePiece implements MouseListener, ActionListener {
         return false;
     }
 
+    public static void setIcon(Icon icon1) {
+        icon = icon1;
+    }
+
     public Icon promotePawn(PositionImpl p1) {
-        JFrame frame = new JFrame("Choose piece to promote to");
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.setSize(300, 300);
-        frame.setLayout(new GridLayout(4, 1));
-        frame.setVisible(true);
+        Thread thread = Thread.currentThread();
 
-        JButton queen = new JButton();
-        JButton rook = new JButton();
-        JButton bishop = new JButton();
-        JButton knight = new JButton();
+        choosePiece = new Thread(new PawnPromotion(p1, thread));
+        choosePiece.start();
 
-        PiecesOnBoard p = new PiecesOnBoard();
-
-        if (p1.getX() == 0) {
-            queen.setIcon(p.whiteQueenImage);
-            rook.setIcon(p.whiteRookImage);
-            bishop.setIcon(p.whiteBishopImage);
-            knight.setIcon(p.whiteKnightImage);
+        try {
+            thread.wait(100000000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        else {
-            queen.setIcon(p.blackQueenImage);
-            rook.setIcon(p.blackRookImage);
-            bishop.setIcon(p.blackBishopImage);
-            knight.setIcon(p.blackKnightImage);
-        }
+        System.out.println(icon);
 
-//        queen.addMouseListener(this);
-//        rook.addMouseListener(this);
-//        bishop.addMouseListener(this);
-//        knight.addMouseListener(this);
-
-        queen.addActionListener(this);
-        rook.addActionListener(this);
-        bishop.addActionListener(this);
-        knight.addActionListener(this);
-
-        frame.add(queen);
-        frame.add(rook);
-        frame.add(bishop);
-        frame.add(knight);
-
-        return queen.getIcon();
+        return icon;
     }
 
+    public static Thread choosePiece;
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-//        System.out.println(e.getComponent());
-//        System.out.println(e.getButton());
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        System.out.println("fasfas");
-    }
 }

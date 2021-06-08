@@ -46,8 +46,9 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
                     move(p2, new PositionImpl(p2.getX(),p2.getY() + 3));
                     move(p1, new PositionImpl(p2.getX(),p2.getY() + 2));
                 }
+                player.changeCurrentPlayer();
+                return;
             }
-            return;
         }
 
         if (pieces.containsKey(p2)) {
@@ -72,14 +73,10 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
         pieces.remove(p2);
         pieces.put(p2, piece);
         System.out.println(p2.getX());
-        System.out.println(pieces.get(p2) instanceof Pawn);
         if (pieces.get(p2) instanceof Pawn && (p2.getX() == 0 || p2.getX() == 7)) {
             buttons[p2.getX()][p2.getY()].setIcon(((Pawn) pieces.get(p2)).promotePawn(p2));
         }
     }
-
-
-
 
 
     @Override
