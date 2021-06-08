@@ -7,15 +7,13 @@ import javafx.geometry.Pos;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class PawnPromotion implements Runnable, MouseListener {
+public class PawnPromotion implements Runnable {
 
-    private JButton queen;
-    private JButton rook;
-    private JButton bishop;
-    private JButton knight;
     private PositionImpl p1;
     private Icon icon;
     private Thread thread;
@@ -33,10 +31,12 @@ public class PawnPromotion implements Runnable, MouseListener {
         frame.setLayout(new GridLayout(4, 1));
         frame.setVisible(true);
 
-        queen = new JButton();
-        rook = new JButton();
-        bishop = new JButton();
-        knight = new JButton();
+        System.out.println(frame);
+
+        JButton queen = new JButton();
+        JButton rook = new JButton();
+        JButton bishop = new JButton();
+        JButton knight = new JButton();
 
         queen.setName("queen");
         rook.setName("rook");
@@ -59,44 +59,46 @@ public class PawnPromotion implements Runnable, MouseListener {
             knight.setIcon(p.blackKnightImage);
         }
 
-        queen.addMouseListener(this);
-        rook.addMouseListener(this);
-        bishop.addMouseListener(this);
-        knight.addMouseListener(this);
+//        queen.addMouseListener(this);
+//        rook.addMouseListener(this);
+//        bishop.addMouseListener(this);
+//        knight.addMouseListener(this);
+
+        queen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { icon = queen.getIcon(); }
+        });
+
+        rook.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { icon = rook.getIcon(); }
+        });
+
+        bishop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { icon = bishop.getIcon(); }
+        });
+
+        knight.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { icon = knight.getIcon(); }
+        });
 
         frame.add(queen);
         frame.add(rook);
         frame.add(bishop);
         frame.add(knight);
-    }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        if (e.getComponent().getName() == "queen") { icon = queen.getIcon(); }
-        else if (e.getComponent().getName() == "rook") { icon = rook.getIcon(); }
-        else if (e.getComponent().getName() == "bishop") { icon = bishop.getIcon(); }
-        else if (e.getComponent().getName() == "knight") { icon = knight.getIcon(); }
+        System.out.println(frame);
 
         Pawn.setIcon(icon);
+        resume();
     }
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
+    public void resume() {
+        synchronized (thread) {
+            Pawn.setPaused(false);
+            thread.notifyAll(); // Unblocks thread
+        }
     }
 }

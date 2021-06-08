@@ -17,6 +17,8 @@ public class Pawn extends BasePiece{
     private int x;
     private int y;
     private static Icon icon;
+    private static boolean running = true;
+    private static boolean paused = false;
     private JButton queen;
     private JButton rook;
     private JButton bishop;
@@ -113,20 +115,34 @@ public class Pawn extends BasePiece{
     public static void setIcon(Icon icon1) {
         icon = icon1;
     }
+    public static void setRunning(boolean running1) { running = running1; }
+    public static void setPaused(boolean paused1) { paused = paused1; }
 
-    public Icon promotePawn(PositionImpl p1) {
-        Thread thread = Thread.currentThread();
+    public Icon promotePawn(PositionImpl p1, Thread thread) {
+
 
         choosePiece = new Thread(new PawnPromotion(p1, thread));
         choosePiece.start();
 
-        try {
-            thread.wait(100000000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while(running) {
+            synchronized (thread) {
+                if (!running) {
+                    break;
+                }
+                if (paused) {
+                    try {
+                        Thread.currentThread().wait();
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+                if (!running) { // running might have changed since we paused
+                    break;
+                }
+            }
         }
 
-        System.out.println(icon);
+        System.out.println("fsadsa");
 
         return icon;
     }

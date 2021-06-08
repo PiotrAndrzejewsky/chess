@@ -74,7 +74,8 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
         pieces.put(p2, piece);
         System.out.println(p2.getX());
         if (pieces.get(p2) instanceof Pawn && (p2.getX() == 0 || p2.getX() == 7)) {
-            buttons[p2.getX()][p2.getY()].setIcon(((Pawn) pieces.get(p2)).promotePawn(p2));
+            Thread thread = Thread.currentThread();
+            buttons[p2.getX()][p2.getY()].setIcon(((Pawn) pieces.get(p2)).promotePawn(p2, thread));
         }
     }
 
