@@ -124,25 +124,23 @@ public class Pawn extends BasePiece{
         choosePiece = new Thread(new PawnPromotion(p1, thread));
         choosePiece.start();
 
-        while(running) {
-            synchronized (thread) {
-                if (!running) {
-                    break;
-                }
-                if (paused) {
-                    try {
-                        Thread.currentThread().wait();
-                    } catch (InterruptedException e) {
-                        break;
-                    }
-                }
-                if (!running) { // running might have changed since we paused
-                    break;
-                }
-            }
-        }
-
-        System.out.println("fsadsa");
+//        while(running) {
+//            synchronized (thread) {
+//                if (!running) {
+//                    break;
+//                }
+//                if (paused) {
+//                    try {
+//                        Thread.currentThread().wait();
+//                    } catch (InterruptedException e) {
+//                        break;
+//                    }
+//                }
+//                if (!running) {
+//                    break;
+//                }
+//            }
+//        }
 
         return icon;
     }

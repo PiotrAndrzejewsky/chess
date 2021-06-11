@@ -11,6 +11,7 @@ import com.peerand.chess.pieces.Pawn;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import java.util.concurrent.CountDownLatch;
 
 public class MouseListener implements Board, java.awt.event.MouseListener {
 
@@ -74,8 +75,10 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
         pieces.put(p2, piece);
         System.out.println(p2.getX());
         if (pieces.get(p2) instanceof Pawn && (p2.getX() == 0 || p2.getX() == 7)) {
-            Thread thread = Thread.currentThread();
-            buttons[p2.getX()][p2.getY()].setIcon(((Pawn) pieces.get(p2)).promotePawn(p2, thread));
+            CountDownLatch latch = new CountDownLatch(2);
+
+//            Thread thread = Thread.currentThread();
+//            buttons[p2.getX()][p2.getY()].setIcon(((Pawn) pieces.get(p2)).promotePawn(p2, thread));
         }
     }
 

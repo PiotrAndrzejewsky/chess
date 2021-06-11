@@ -1,18 +1,14 @@
 package com.peerand.chess.pieces;
 
 import com.peerand.chess.implementation.PositionImpl;
-import com.peerand.chess.ui.GraphicBoard;
 import com.peerand.chess.ui.PiecesOnBoard;
-import javafx.geometry.Pos;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-public class PawnPromotion implements Runnable {
+public class PawnPromotion extends Thread{
 
     private PositionImpl p1;
     private Icon icon;
@@ -30,8 +26,6 @@ public class PawnPromotion implements Runnable {
         frame.setSize(300, 300);
         frame.setLayout(new GridLayout(4, 1));
         frame.setVisible(true);
-
-        System.out.println(frame);
 
         JButton queen = new JButton();
         JButton rook = new JButton();
@@ -59,14 +53,12 @@ public class PawnPromotion implements Runnable {
             knight.setIcon(p.blackKnightImage);
         }
 
-//        queen.addMouseListener(this);
-//        rook.addMouseListener(this);
-//        bishop.addMouseListener(this);
-//        knight.addMouseListener(this);
-
         queen.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { icon = queen.getIcon(); }
+            public void actionPerformed(ActionEvent e) { icon = queen.getIcon();
+                System.out.println(Thread.currentThread().getName());
+            }
+
         });
 
         rook.addActionListener(new ActionListener() {
@@ -89,16 +81,28 @@ public class PawnPromotion implements Runnable {
         frame.add(bishop);
         frame.add(knight);
 
-        System.out.println(frame);
 
         Pawn.setIcon(icon);
         resume();
     }
 
-    public void resume() {
-        synchronized (thread) {
-            Pawn.setPaused(false);
-            thread.notifyAll(); // Unblocks thread
+    public void resumeLatch() {
+        try
+        {
+            latch.countDown();
+            System.out.println(Thread.currentThread().getName()
+                    + " finished");
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
         }
     }
+
+//    public void resume() {
+//        synchronized (thread) {
+//            Pawn.setPaused(false);
+//            thread.notifyAll(); // Unblocks thread
+//        }
+//    }
 }
