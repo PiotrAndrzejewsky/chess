@@ -1,19 +1,15 @@
 package com.peerand.chess.ui;
 
-import com.peerand.chess.core.Board;
-import com.peerand.chess.core.Player;
-import com.peerand.chess.core.Position;
+import com.peerand.chess.core.*;
 import com.peerand.chess.implementation.PositionImpl;
 import com.peerand.chess.pieces.BasePiece;
 import com.peerand.chess.pieces.King;
-import com.peerand.chess.pieces.Pawn;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
-import java.util.concurrent.CountDownLatch;
 
-public class MouseListener implements Board, java.awt.event.MouseListener {
+public class BoardImplementation implements Board, java.awt.event.MouseListener {
 
     private final JButton[][] buttons;
     private final HashMap<Position, BasePiece> pieces;
@@ -22,7 +18,7 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
     private PositionImpl position2 = new PositionImpl(0, 0);
     private Player player = new Player(BasePiece.Color.WHITE);
 
-    MouseListener(JButton[][] buttons, HashMap<Position, BasePiece> pieces) {
+    public BoardImplementation(JButton[][] buttons, HashMap<Position, BasePiece> pieces) {
         this.buttons = buttons;
         this.pieces = pieces;
     }
@@ -65,6 +61,9 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
 
     @Override
     public void move(PositionImpl p1, PositionImpl p2) {
+        Check check = new Check(player, pieces, p1, p2);
+        Draw draw = new Draw(player, pieces, p1, p2);
+        if (check.isLegalMove()) { return; }
         player.changeCurrentPlayer();
         pieces.get(p1).isMoved(true);
         buttons[p2.getX()][p2.getY()].setIcon(buttons[p1.getX()][p1.getY()].getIcon());
@@ -73,13 +72,8 @@ public class MouseListener implements Board, java.awt.event.MouseListener {
         pieces.remove(p1);
         pieces.remove(p2);
         pieces.put(p2, piece);
-        System.out.println(p2.getX());
-        if (pieces.get(p2) instanceof Pawn && (p2.getX() == 0 || p2.getX() == 7)) {
-            CountDownLatch latch = new CountDownLatch(2);
-
-//            Thread thread = Thread.currentThread();
-//            buttons[p2.getX()][p2.getY()].setIcon(((Pawn) pieces.get(p2)).promotePawn(p2, thread));
-        }
+        if (check.isCheckmated()) { System.out.println("Koniec gry, jest mat"); }
+        if (draw.isInStalemate()) { System.out.println("Koniec gry, pat"); }
     }
 
 

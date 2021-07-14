@@ -19,7 +19,7 @@ public class King extends BasePiece{
         x = p1.getX();
         y = p1.getY();
 
-
+//        if (pieces.containsKey(p2) && pieces.get(p2).getColor() == pieces.get(p1).getColor()) { return false; }
 
         // x and y are == 1
         if (changeOfX == 1 && changeOfY == 1) return x + 1 == p2.getX() && y + 1 == p2.getY();
@@ -68,7 +68,6 @@ public class King extends BasePiece{
                 }
             }
         }
-        System.out.println("false");
         return false;
     }
 }

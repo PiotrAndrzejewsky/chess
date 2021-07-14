@@ -2,28 +2,11 @@ package com.peerand.chess.pieces;
 
 import com.peerand.chess.core.Position;
 import com.peerand.chess.implementation.PositionImpl;
-import com.peerand.chess.ui.GraphicBoard;
-import com.peerand.chess.ui.PiecesOnBoard;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.HashMap;
 
 public class Pawn extends BasePiece{
     private int x;
     private int y;
-    private static Icon icon;
-    private static boolean running = true;
-    private static boolean paused = false;
-    private JButton queen;
-    private JButton rook;
-    private JButton bishop;
-    private JButton knight;
-    private PositionImpl p1;
 
     public Pawn(Color color, boolean moved, Type type) {
         super(color, moved, type);
@@ -87,11 +70,9 @@ public class Pawn extends BasePiece{
 
             if (xAdd == -2) {
                 return x - 2 == p2.getX() && y == p2.getY() &&
-                        !pieces.containsKey(new PositionImpl(x - 1, y))&& !pieces.containsKey(p2);
+                        !pieces.containsKey(new PositionImpl(x - 1, y)) && !pieces.containsKey(p2);
             }
-        }
-
-        else {
+        } else {
             if ((yAdd == -1 || yAdd == 1) && pieces.containsKey(p2)) {
                 if (pieces.get(p1).getColor() != pieces.get(p2).getColor()) {
                     if (yAdd == -1) return x + 1 == p2.getX() && y - 1 == p2.getY();
@@ -105,46 +86,10 @@ public class Pawn extends BasePiece{
 
             if (xAdd == 2) {
                 return x + 2 == p2.getX() && y == p2.getY() &&
-                        !pieces.containsKey(new PositionImpl(x + 1, y))&& !pieces.containsKey(p2);
+                        !pieces.containsKey(new PositionImpl(x + 1, y)) && !pieces.containsKey(p2);
             }
         }
 
         return false;
     }
-
-    public static void setIcon(Icon icon1) {
-        icon = icon1;
-    }
-    public static void setRunning(boolean running1) { running = running1; }
-    public static void setPaused(boolean paused1) { paused = paused1; }
-
-    public Icon promotePawn(PositionImpl p1, Thread thread) {
-
-
-        choosePiece = new Thread(new PawnPromotion(p1, thread));
-        choosePiece.start();
-
-//        while(running) {
-//            synchronized (thread) {
-//                if (!running) {
-//                    break;
-//                }
-//                if (paused) {
-//                    try {
-//                        Thread.currentThread().wait();
-//                    } catch (InterruptedException e) {
-//                        break;
-//                    }
-//                }
-//                if (!running) {
-//                    break;
-//                }
-//            }
-//        }
-
-        return icon;
-    }
-
-    public static Thread choosePiece;
-
 }
