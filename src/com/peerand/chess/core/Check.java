@@ -29,17 +29,21 @@ public class Check{
         this.p2 = p2;
     }
 
+    public void setPieces(HashMap<Position, BasePiece> pieces) {
+        this.pieces = (HashMap<Position, BasePiece>) pieces.clone();
+    }
+
     public boolean isLegalMove() {
         move(p1, p2);
         setKingInfo();
         setPieceInfo();
-        return pieces.get(pieceLocation).canMove(pieces, pieceLocation, kingLocation);
+        return pieces.get(pieceLocation) != null && pieces.get(pieceLocation).canMove(pieces, pieceLocation, kingLocation);
     }
 
     public boolean isInCheck() {
         setKingInfo();
         setPieceInfo();
-        return pieces.containsKey(pieceLocation) && pieces.get(pieceLocation).canMove(pieces, pieceLocation, kingLocation);
+        return pieces.get(pieceLocation) != null && pieces.get(pieceLocation).canMove(pieces, pieceLocation, kingLocation);
     }
 
     public void setKingInfo() {
@@ -64,12 +68,14 @@ public class Check{
     public void setPieceInfo() {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                if (pieces.containsKey(new PositionImpl(x, y)) && pieces.get(new PositionImpl(x, y)).getColor() != kingColor) {
-                    if (pieces.get(new PositionImpl(x, y)).canMove(pieces, new PositionImpl(x, y), kingLocation)) {
-                        pieceLocation.setX(x);
-                        pieceLocation.setY(y);
-                        pieceType = pieces.get(pieceLocation).getType();
-                        return;
+                if (pieces.containsKey(new PositionImpl(x, y)) && pieces.get(new PositionImpl(x, y)) != null) {
+                    if (pieces.get(new PositionImpl(x, y)).getColor() != kingColor) {
+                        if (pieces.get(new PositionImpl(x, y)).canMove(pieces, new PositionImpl(x, y), kingLocation)) {
+                            pieceLocation.setX(x);
+                            pieceLocation.setY(y);
+                            pieceType = pieces.get(pieceLocation).getType();
+                            return;
+                        }
                     }
                 }
             }
@@ -88,11 +94,11 @@ public class Check{
                     for (int i = 0; i < 8; i++) {
                         for (int j = 0; j < 8; j++) {
 
-                            if (pieces.get(new PositionImpl(x, y)).canMove(pieces, new PositionImpl(x, y ), new PositionImpl(i, j))) {
+                            if (pieces.get(new PositionImpl(x, y)).canMove(pieces, new PositionImpl(x, y ), new PositionImpl(i, j))
+                                    && x != pieceLocation.getX() && y != pieceLocation.getY()){
                                 move(new PositionImpl(x, y), new PositionImpl(i, j));
 
                                 if (!isInCheck()) {
-                                    System.out.println(x + " " + y + " " + i + " " + j);
                                     return false;
                                 }
 

@@ -10,6 +10,7 @@ public abstract class BasePiece {
     protected Color color;
     protected boolean moved;
     protected Type type;
+    protected boolean enPassant = false;
 
     public BasePiece(Color color, boolean moved, Type type) {
         this.color = color;
@@ -27,13 +28,17 @@ public abstract class BasePiece {
         return moved;
     }
 
-    public void isMoved(boolean moved) {
+    public void setMoved(boolean moved) {
         this.moved = moved;
     }
 
     public Type getType() {
         return type;
     }
+
+    public boolean canEnPassant() { return enPassant; }
+
+    public void setEnPassant(boolean enPassant) { this.enPassant = enPassant; }
 
     public boolean checkBRQMove(HashMap<Position, BasePiece> pieces, PositionImpl p1, PositionImpl p2, int xAdd, int yAdd, int x, int y) {
         while (x <= 7 && y <= 7 && x >= 0 && y >= 0) {

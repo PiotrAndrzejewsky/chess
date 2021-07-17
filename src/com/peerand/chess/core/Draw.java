@@ -23,6 +23,10 @@ public class Draw {
 
     public boolean isInStalemate() {
 
+        Check check = new Check(player, pieces, new PositionImpl(0, 0), new PositionImpl(0, 0));
+
+        if (check.isInCheck()) { return false; }
+
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
 
@@ -32,10 +36,8 @@ public class Draw {
 
                             if (pieces.get(new PositionImpl(x, y)).canMove(pieces, new PositionImpl(x,y), new PositionImpl(i,j))
                                     && pieces.get(new PositionImpl(x, y)).getColor() == player.getCurrentPlayer()) {
-                                move(new PositionImpl(x, y),new PositionImpl(i, j));
-                                Check check = new Check(player, pieces, new PositionImpl(x, y), new PositionImpl(i,j));
-                                if (check.isInCheck()) { undoMove(); }
-                                else { return false; }
+                                if (!check.isLegalMove()) { return false; }
+                                undoMove();
                             }
                         }
                     }
@@ -43,7 +45,7 @@ public class Draw {
             }
         }
         return true;
-}
+    }
 
     public void undoMove() {
         pieces.clear();

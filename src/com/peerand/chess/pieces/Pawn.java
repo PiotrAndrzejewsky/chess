@@ -92,4 +92,37 @@ public class Pawn extends BasePiece{
 
         return false;
     }
+
+    public boolean canEnPassant(HashMap<Position, BasePiece> pieces, PositionImpl p1, PositionImpl p2) {
+        if (pieces.containsKey(p1)) {
+            int changeOfY = p1.getY() - p2.getY();
+            if (changeOfY == 1 || changeOfY == -1) {
+                if (p1.getX() - p2.getX() == 1 && pieces.get(p1).getColor() == Color.WHITE) {
+                    return pieces.containsKey(new PositionImpl(p1.getX(), p2.getY())) && pieces.get(new PositionImpl(p1.getX(), p2.getY())).canEnPassant();
+                } else if (p1.getX() - p2.getX() == -1 && pieces.get(p1).getColor() == Color.BLACK) {
+                    return pieces.containsKey(new PositionImpl(p1.getX(), p2.getY())) && pieces.get(new PositionImpl(p1.getX(), p2.getY())).canEnPassant();
+                }
+            }
+
+
+        }
+        return false;
+    }
+
+    public boolean canPromote(HashMap<Position, BasePiece> pieces, PositionImpl p1, PositionImpl p2) {
+        if (pieces.containsKey(p1)) {
+            int changeOfY = p1.getY() - p2.getY();
+            if (changeOfY == 1 || changeOfY == -1) {
+                if (p2.getX() == 0 && pieces.get(p1).getColor() == Color.WHITE && pieces.containsKey(p2) && pieces.get(p2).getColor() == Color.BLACK) {
+                    return true;
+                }
+                return p2.getX() == 7 && pieces.get(p1).getColor() == Color.BLACK && pieces.containsKey(p2) && pieces.get(p2).getColor() == Color.WHITE;
+            }
+            else if (changeOfY == 0) {
+                if (!pieces.containsKey(p2) && p2.getX() == 0 && pieces.get(p1).getColor() == Color.WHITE) { return true; }
+                return !pieces.containsKey(p2) && p2.getX() == 8 && pieces.get(p1).getColor() == Color.BLACK;
+            }
+        }
+        return false;
+    }
 }

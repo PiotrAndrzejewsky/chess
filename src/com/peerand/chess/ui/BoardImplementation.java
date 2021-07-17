@@ -2,10 +2,10 @@ package com.peerand.chess.ui;
 
 import com.peerand.chess.core.*;
 import com.peerand.chess.implementation.PositionImpl;
-import com.peerand.chess.pieces.BasePiece;
-import com.peerand.chess.pieces.King;
+import com.peerand.chess.pieces.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
@@ -17,6 +17,12 @@ public class BoardImplementation implements Board, java.awt.event.MouseListener 
     private PositionImpl position1 = new PositionImpl(0, 0);
     private PositionImpl position2 = new PositionImpl(0, 0);
     private Player player = new Player(BasePiece.Color.WHITE);
+    private PositionImpl promotedPiecePosition = new PositionImpl(0, 0);
+    private JFrame newFrame = new JFrame("Choose piece to promote, or do nothing if you want queen");
+    private JButton rook = new JButton();
+    private JButton bishop = new JButton();
+    private JButton knight = new JButton();
+
 
     public BoardImplementation(JButton[][] buttons, HashMap<Position, BasePiece> pieces) {
         this.buttons = buttons;
@@ -48,6 +54,39 @@ public class BoardImplementation implements Board, java.awt.event.MouseListener 
             }
         }
 
+        if (pieces.get(p1) instanceof Pawn) {
+            if (!pieces.containsKey(p2)) {
+                if (((Pawn) pieces.get(p1)).canEnPassant(pieces, p1, p2)) {
+                    if (p1.getX() == 3) {
+                        move(p1, new PositionImpl(p2.getX(), p2.getY()));
+                        buttons[p2.getX() + 1][p2.getY()].setIcon(null);
+                        pieces.remove(new PositionImpl(p2.getX() + 1, p2.getY()));
+                    } else {
+                        move(p1, new PositionImpl(p2.getX(), p2.getY()));
+                        buttons[p2.getX() - 1][p2.getY()].setIcon(null);
+                        pieces.remove(new PositionImpl(p2.getX() - 1, p2.getY()));
+                    }
+                    return;
+                }
+            }
+
+            if (((Pawn) pieces.get(p1)).canPromote(pieces, p1, p2)) {
+                PiecesOnBoard piecesOnBoard = new PiecesOnBoard();
+                move(p1, p2);
+                pieces.remove(p2);
+                player.changeCurrentPlayer();
+                pieces.put(p2, new Queen(player.getCurrentPlayer(), false, BasePiece.Type.QUEEN));
+                if (player.getCurrentPlayer() == BasePiece.Color.WHITE) { buttons[p2.getX()][p2.getY()].setIcon(piecesOnBoard.whiteQueenImage); }
+                else { buttons[p2.getX()][p2.getY()].setIcon(piecesOnBoard.blackQueenImage); }
+                promotedPiecePosition.setX(p2.getX());
+                promotedPiecePosition.setY(p2.getY());
+
+                createNewFrame();
+
+                return;
+            }
+        }
+
         if (pieces.containsKey(p2)) {
             if (pieces.get(p1).getColor() == pieces.get(p2).getColor()) {
                 return;
@@ -59,36 +98,111 @@ public class BoardImplementation implements Board, java.awt.event.MouseListener 
         }
     }
 
+
+    public void setEnPassantToFalse() {
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                if (pieces.containsKey(new PositionImpl(x, y))) { pieces.get(new PositionImpl(x, y)).setEnPassant(false); }
+            }
+        }
+    }
+
+    public void createNewFrame() {
+        newFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        newFrame.setSize(550, 150);
+        newFrame.setLayout(new GridLayout(1, 3));
+        newFrame.setVisible(true);
+
+        rook.setName("rook");
+        bishop.setName("bishop");
+        knight.setName("knight");
+
+        PiecesOnBoard piecesOnBoard = new PiecesOnBoard();
+
+        if (player.getCurrentPlayer() == BasePiece.Color.WHITE) {
+            rook.setIcon(piecesOnBoard.whiteRookImage);
+            bishop.setIcon(piecesOnBoard.whiteBishopImage);
+            knight.setIcon(piecesOnBoard.whiteKnightImage);
+        }
+        else {
+            rook.setIcon(piecesOnBoard.blackRookImage);
+            bishop.setIcon(piecesOnBoard.blackBishopImage);
+            knight.setIcon(piecesOnBoard.blackKnightImage);
+        }
+
+        rook.addMouseListener(this);
+        bishop.addMouseListener(this);
+        knight.addMouseListener(this);
+
+
+        if (newFrame.getBackground() != Color.DARK_GRAY) {
+            newFrame.add(rook);
+            newFrame.add(bishop);
+            newFrame.add(knight);
+        }
+
+
+        newFrame.setBackground(Color.DARK_GRAY);
+
+        player.changeCurrentPlayer();
+    }
+
     @Override
     public void move(PositionImpl p1, PositionImpl p2) {
+        setEnPassantToFalse();
         Check check = new Check(player, pieces, p1, p2);
         Draw draw = new Draw(player, pieces, p1, p2);
         if (check.isLegalMove()) { return; }
         player.changeCurrentPlayer();
-        pieces.get(p1).isMoved(true);
+        pieces.get(p1).setMoved(true);
         buttons[p2.getX()][p2.getY()].setIcon(buttons[p1.getX()][p1.getY()].getIcon());
         buttons[p1.getX()][p1.getY()].setIcon(null);
         BasePiece piece = pieces.get(p1);
         pieces.remove(p1);
         pieces.remove(p2);
         pieces.put(p2, piece);
-        if (check.isCheckmated()) { System.out.println("Koniec gry, jest mat"); }
-        if (draw.isInStalemate()) { System.out.println("Koniec gry, pat"); }
-    }
+        check.setPieces(pieces);
+        if (check.isCheckmated()) { player.changeCurrentPlayer(); System.out.println("Game over, " + player.getCurrentPlayer() + " won"); }
+        if (draw.isInStalemate()) { System.out.println("Game over, it's a stalemate"); }
 
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
+        pieces.get(p2).setEnPassant(true);
+        newFrame.dispose();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (e.getComponent().getName().equals("rook") || e.getComponent().getName().equals("bishop") ||
+                e.getComponent().getName().equals("knight")) {
+            player.changeCurrentPlayer();
+            pieces.remove(promotedPiecePosition);
+            PiecesOnBoard piecesOnBoard = new PiecesOnBoard();
+            if (e.getComponent().getName().equals("rook")){
+                pieces.put(promotedPiecePosition, new Rook(player.getCurrentPlayer(), false, BasePiece.Type.ROOK));
+                if (player.getCurrentPlayer() == BasePiece.Color.WHITE) {
+                    buttons[promotedPiecePosition.getX()][promotedPiecePosition.getY()].setIcon(piecesOnBoard.whiteRookImage);
+                }
+                else { buttons[promotedPiecePosition.getX()][promotedPiecePosition.getY()].setIcon(piecesOnBoard.blackRookImage); }
+            }
+            else if (e.getComponent().getName().equals("bishop")) {
+                pieces.put(promotedPiecePosition, new Bishop(player.getCurrentPlayer(), false, BasePiece.Type.BISHOP));
+                if (player.getCurrentPlayer() == BasePiece.Color.WHITE) {
+                    buttons[promotedPiecePosition.getX()][promotedPiecePosition.getY()].setIcon(piecesOnBoard.whiteBishopImage);
+                }
+                else { buttons[promotedPiecePosition.getX()][promotedPiecePosition.getY()].setIcon(piecesOnBoard.blackBishopImage); }
+            }
+            else {
+                pieces.put(promotedPiecePosition, new Knight(player.getCurrentPlayer(), false, BasePiece.Type.KNIGHT));
+                if (player.getCurrentPlayer() == BasePiece.Color.WHITE) {
+                    buttons[promotedPiecePosition.getX()][promotedPiecePosition.getY()].setIcon(piecesOnBoard.whiteKnightImage);
+                } else {
+                    buttons[promotedPiecePosition.getX()][promotedPiecePosition.getY()].setIcon(piecesOnBoard.blackKnightImage);
+                }
+            }
+            player.changeCurrentPlayer();
+
+            newFrame.dispose();
+        }
+
         PositionImpl position = new PositionImpl(0, 0);
 
         for (int i = 0; i < 8; i++) {
@@ -111,6 +225,18 @@ public class BoardImplementation implements Board, java.awt.event.MouseListener 
         }
 
     }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+
 
     @Override
     public void mouseEntered(MouseEvent e) {

@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class PiecesOnBoard{
 
     private final String path = "src/resources/pieceIcons/";
-    private final String startingPiecePlacement = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+    private final String startingPiecePlacement = "rnbqkbnr/Pppppppp/8/8/8/8/pPPPPPPP/RNBQKBNR";
     private final String[] piecePlacementArray = startingPiecePlacement.split("");
 
     public final ImageIcon blackRookImage = new ImageIcon(path + "br.png");
