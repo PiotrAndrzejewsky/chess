@@ -71,6 +71,7 @@ public class Draw {
                 }
             }
         }
+
         piece1 = pieces.get(p1);
         pieces.remove(p1);
         pieces.remove(p2);

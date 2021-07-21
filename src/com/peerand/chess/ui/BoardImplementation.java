@@ -22,11 +22,13 @@ public class BoardImplementation implements Board, java.awt.event.MouseListener 
     private JButton rook = new JButton();
     private JButton bishop = new JButton();
     private JButton knight = new JButton();
+    private JFrame frame;
 
 
-    public BoardImplementation(JButton[][] buttons, HashMap<Position, BasePiece> pieces) {
+    public BoardImplementation(JButton[][] buttons, HashMap<Position, BasePiece> pieces, JFrame frame) {
         this.buttons = buttons;
         this.pieces = pieces;
+        this.frame = frame;
     }
 
     public void addButtonsToMouseListener() {
@@ -147,6 +149,14 @@ public class BoardImplementation implements Board, java.awt.event.MouseListener 
         player.changeCurrentPlayer();
     }
 
+    public void removeMouseListener() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                buttons[i][j].removeMouseListener(this);
+            }
+        }
+    }
+
     @Override
     public void move(PositionImpl p1, PositionImpl p2) {
         setEnPassantToFalse();
@@ -162,8 +172,9 @@ public class BoardImplementation implements Board, java.awt.event.MouseListener 
         pieces.remove(p2);
         pieces.put(p2, piece);
         check.setPieces(pieces);
-        if (check.isCheckmated()) { player.changeCurrentPlayer(); System.out.println("Game over, " + player.getCurrentPlayer() + " won"); }
-        if (draw.isInStalemate()) { System.out.println("Game over, it's a stalemate"); }
+        EndGame endGame = new EndGame();
+        if (check.isCheckmated()) { endGame.gameEnded(player, "checkmate"); removeMouseListener(); }
+        if (draw.isInStalemate()) { endGame.gameEnded(player, "stalemate"); removeMouseListener(); }
 
         pieces.get(p2).setEnPassant(true);
         newFrame.dispose();
