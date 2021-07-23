@@ -94,10 +94,15 @@ public class Check{
                     for (int i = 0; i < 8; i++) {
                         for (int j = 0; j < 8; j++) {
 
-                            if (pieces.get(new PositionImpl(x, y)).canMove(pieces, new PositionImpl(x, y ), new PositionImpl(i, j))
-                                    && x != pieceLocation.getX() && y != pieceLocation.getY()){
+                            if (pieces.get(new PositionImpl(x, y)).canMove(pieces, new PositionImpl(x, y), new PositionImpl(i, j))
+                                    && !(x == pieceLocation.getX() && y == pieceLocation.getY())) {
                                 move(new PositionImpl(x, y), new PositionImpl(i, j));
 
+
+                                if (x == 0 && y == 5 && i == 5 && j == 5) {
+                                    System.out.println("Walic");
+                                    System.out.println(isInCheck());
+                                }
                                 if (!isInCheck()) {
                                     return false;
                                 }
@@ -109,7 +114,14 @@ public class Check{
                 }
             }
         }
-
+        setKingInfo();
+        move(kingLocation, pieceLocation);
+        System.out.println(isInCheck());
+        System.out.print(kingLocation.getX());
+        System.out.print(kingLocation.getY());
+        System.out.print(pieceLocation.getY());
+        System.out.print(pieceLocation.getY());
+        System.out.println("tak");
         return true;
     }
 

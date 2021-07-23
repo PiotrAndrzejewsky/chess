@@ -73,6 +73,8 @@ public class BoardImplementation implements Board, java.awt.event.MouseListener 
             }
 
             if (((Pawn) pieces.get(p1)).canPromote(pieces, p1, p2)) {
+                Check check = new Check(player, pieces, p1, p2);
+                if (check.isLegalMove()) { return; }
                 PiecesOnBoard piecesOnBoard = new PiecesOnBoard();
                 move(p1, p2);
                 pieces.remove(p2);
@@ -173,11 +175,14 @@ public class BoardImplementation implements Board, java.awt.event.MouseListener 
         pieces.put(p2, piece);
         check.setPieces(pieces);
         EndGame endGame = new EndGame();
-        if (check.isCheckmated()) { endGame.gameEnded(player, "checkmate"); removeMouseListener(); }
-        if (draw.isInStalemate()) { endGame.gameEnded(player, "stalemate"); removeMouseListener(); }
+        if (check.isCheckmated()) { endGame.gameEnded(player, "checkmate", frame); removeMouseListener(); }
+        if (draw.isInStalemate()) { endGame.gameEnded(player, "stalemate", frame); removeMouseListener(); }
 
         pieces.get(p2).setEnPassant(true);
         newFrame.dispose();
+        GraphicBoard.colorButtons(buttons);
+        buttons[p1.getX()][p1.getY()].setBackground(new Color(122,234, 111 ));
+        buttons[p2.getX()][p2.getY()].setBackground(new Color(122,234, 111 ));
     }
 
     @Override
