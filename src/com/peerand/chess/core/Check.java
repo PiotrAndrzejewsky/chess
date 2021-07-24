@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class Check{
 
-    private final Player player;
+    private Player player;
     private HashMap <Position, BasePiece> pieces;
     private final PositionImpl p1;
     private PositionImpl p2;
@@ -29,8 +29,19 @@ public class Check{
         this.p2 = p2;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     public void setPieces(HashMap<Position, BasePiece> pieces) {
-        this.pieces = (HashMap<Position, BasePiece>) pieces.clone();
+        this.pieces.clear();
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                if (pieces.containsKey(new PositionImpl(x, y))) {
+                    this.pieces.put(new PositionImpl(x, y), pieces.get(new PositionImpl(x, y)));
+                }
+            }
+        }
     }
 
     public boolean isLegalMove() {
@@ -98,11 +109,6 @@ public class Check{
                                     && !(x == pieceLocation.getX() && y == pieceLocation.getY())) {
                                 move(new PositionImpl(x, y), new PositionImpl(i, j));
 
-
-                                if (x == 0 && y == 5 && i == 5 && j == 5) {
-                                    System.out.println("Walic");
-                                    System.out.println(isInCheck());
-                                }
                                 if (!isInCheck()) {
                                     return false;
                                 }
@@ -114,14 +120,6 @@ public class Check{
                 }
             }
         }
-        setKingInfo();
-        move(kingLocation, pieceLocation);
-        System.out.println(isInCheck());
-        System.out.print(kingLocation.getX());
-        System.out.print(kingLocation.getY());
-        System.out.print(pieceLocation.getY());
-        System.out.print(pieceLocation.getY());
-        System.out.println("tak");
         return true;
     }
 

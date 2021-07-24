@@ -35,8 +35,12 @@ public class EndGame implements ActionListener {
             label.setText("Game over, " + player.currentPlayer.toString().toLowerCase(Locale.ROOT) + " won");
         }
 
-        if (type.equals("stalemate")) {
+        else if (type.equals("stalemate")) {
             label.setText("Game over, it is a stalemate");
+        }
+
+        else {
+            label.setText("Game over, insufficient material, it's a draw");
         }
 
     }

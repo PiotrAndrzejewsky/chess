@@ -163,7 +163,6 @@ public class BoardImplementation implements Board, java.awt.event.MouseListener 
     public void move(PositionImpl p1, PositionImpl p2) {
         setEnPassantToFalse();
         Check check = new Check(player, pieces, p1, p2);
-        Draw draw = new Draw(player, pieces, p1, p2);
         if (check.isLegalMove()) { return; }
         player.changeCurrentPlayer();
         pieces.get(p1).setMoved(true);
@@ -175,14 +174,17 @@ public class BoardImplementation implements Board, java.awt.event.MouseListener 
         pieces.put(p2, piece);
         check.setPieces(pieces);
         EndGame endGame = new EndGame();
-        if (check.isCheckmated()) { endGame.gameEnded(player, "checkmate", frame); removeMouseListener(); }
-        if (draw.isInStalemate()) { endGame.gameEnded(player, "stalemate", frame); removeMouseListener(); }
 
         pieces.get(p2).setEnPassant(true);
         newFrame.dispose();
         GraphicBoard.colorButtons(buttons);
         buttons[p1.getX()][p1.getY()].setBackground(new Color(122,234, 111 ));
         buttons[p2.getX()][p2.getY()].setBackground(new Color(122,234, 111 ));
+
+        Draw draw = new Draw(player, pieces, p1, p2);
+        if (check.isCheckmated()) { endGame.gameEnded(player, "checkmate", frame); removeMouseListener(); }
+        if (draw.isInStalemate()) { endGame.gameEnded(player, "stalemate", frame); removeMouseListener(); }
+        if (draw.insufficientMaterial()) {endGame.gameEnded(player, "insufficientMaterial", frame); removeMouseListener(); }
     }
 
     @Override

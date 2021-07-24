@@ -36,8 +36,10 @@ public class Draw {
 
                             if (pieces.get(new PositionImpl(x, y)).canMove(pieces, new PositionImpl(x,y), new PositionImpl(i,j))
                                     && pieces.get(new PositionImpl(x, y)).getColor() == player.getCurrentPlayer()) {
-                                if (!check.isLegalMove()) { return false; }
-                                undoMove();
+                                check.move(new PositionImpl(x, y), new PositionImpl(i, j));
+                                if (!check.isInCheck()) { return false; }
+
+                                check.undoMove();
                             }
                         }
                     }
@@ -47,34 +49,22 @@ public class Draw {
         return true;
     }
 
-    public void undoMove() {
-        pieces.clear();
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
-                if (pieces2.containsKey(new PositionImpl(x, y))) {
-                    pieces.put(new PositionImpl(x, y), pieces2.get(new PositionImpl(x, y)));
-                }
-            }
-        }
-    }
-
-
-    public void move(PositionImpl p1, PositionImpl p2) {
-        if (pieces.containsKey(p2) && pieces.get(p1).getColor() == pieces.get(p2).getColor()) { return; }
-
-        pieces2.clear();
+    public boolean insufficientMaterial() {
+        PositionImpl pos = new PositionImpl(0, 0);
 
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 if (pieces.containsKey(new PositionImpl(x, y))) {
-                    pieces2.put(new PositionImpl(x, y), pieces.get(new PositionImpl(x, y)));
+                    pos.setX(x);
+                    pos.setY(y);
+                    if ((pieces.get(pos).getType() == BasePiece.Type.QUEEN || pieces.get(pos).getType() == BasePiece.Type.ROOK
+                            || pieces.get(pos).getType() == BasePiece.Type.PAWN)) {
+
+                        return false;
+                    }
                 }
             }
         }
-
-        piece1 = pieces.get(p1);
-        pieces.remove(p1);
-        pieces.remove(p2);
-        pieces.put(p2, piece1);
+        return true;
     }
 }
